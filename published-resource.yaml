@@ -1,0 +1,9 @@
+apiVersion: syncagent.kcp.io/v1alpha1
+kind: PublishedResource
+metadata:
+  name: certificates
+spec:
+  resource:
+    kind: Certificate
+    apiGroup: example.kcp.io
+    versions: [v1alpha1]

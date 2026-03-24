@@ -115,3 +115,4 @@ helm_remote(
   values=['api-syncagent-values.yaml'],
   set=[],
 )
+k8s_yaml('./published-resource.yaml')

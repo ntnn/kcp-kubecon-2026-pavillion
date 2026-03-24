@@ -1,0 +1,15 @@
+apiVersion: apis.kcp.io/v1alpha2
+kind: APIBinding
+metadata:
+  name: certificates
+spec:
+  reference:
+    export:
+      name: certificates
+      path: root:provider
+  permissionClaims:
+  - resource: events
+    verbs: ["*"]
+    state: Accepted
+    selector:
+      matchAll: true
