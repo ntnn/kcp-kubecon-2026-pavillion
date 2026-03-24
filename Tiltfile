@@ -2,6 +2,13 @@ load('ext://helm_resource', 'helm_resource')
 load('ext://namespace', 'namespace_create')
 load("ext://cert_manager", "deploy_cert_manager")
 
+update_settings(
+    max_parallel_updates = 3,
+    k8s_upsert_timeout_secs = 60,
+    suppress_unused_image_warnings = None,
+    k8s_server_side_apply = 'auto',
+)
+
 current_context = k8s_context()
 
 deploy_cert_manager(version='v1.19.2')
@@ -19,6 +26,7 @@ helm_resource(
 )
 k8s_kind('GatewayClass')
 k8s_kind('Gateway')
+k8s_kind('TLSRoute')
 
 # install the gateway and configure tilt to start a port-forward to the
 # resulting service that will route the traffic.
@@ -68,13 +76,13 @@ k8s_kind('FrontProxy',
 )
 
 k8s_yaml('./shard-root.yaml')
-k8s_resource('root:rootshard', labels='kcp')
+k8s_resource('root:rootshard', labels='kcp', resource_deps=['gateway-helm'])
 
 k8s_yaml('./shard-theseus.yaml')
-k8s_resource('theseus', labels='kcp')
+k8s_resource('theseus:shard', labels='kcp', resource_deps=['gateway-helm', 'root:rootshard'])
 
 k8s_yaml('./front-proxy.yaml')
-k8s_resource('frontproxy', labels='kcp')
+k8s_resource('frontproxy', labels='kcp', resource_deps=['gateway-helm', 'root:rootshard'])
 
 k8s_kind('Kubeconfig')
 k8s_yaml('./kubeconfig-kcp-admin.yaml')
@@ -103,6 +111,7 @@ helm_resource(
 )
 k8s_kind('ResourceGraphDefinition')
 k8s_yaml('./rgd.yaml')
+k8s_resource('certificates.example.kcp.io', resource_deps=['kro'])
 
 namespace_create('api-syncagent-system')
 k8s_yaml('./api-syncagent-rbac.yaml')
@@ -117,3 +126,4 @@ helm_resource(
 )
 k8s_kind('PublishedResource')
 k8s_yaml('./published-resource.yaml')
+k8s_resource('certificates', resource_deps=['api-syncagent'])

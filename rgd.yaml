@@ -19,7 +19,7 @@ spec:
             version: ${secret.?apiVersion}
             kind: ${secret.?kind}
           name: ${secret.metadata.name}
-          namespace: ${secret.metadata.namespace}
+          namespace: ${certificate.metadata.?annotations["remote-object-namespace"]}
 
   resources:
 
