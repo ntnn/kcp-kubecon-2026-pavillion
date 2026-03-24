@@ -1,4 +1,4 @@
-load('ext://helm_remote', 'helm_remote')
+load('ext://helm_resource', 'helm_resource')
 load('ext://namespace', 'namespace_create')
 load("ext://cert_manager", "deploy_cert_manager")
 
@@ -8,15 +8,14 @@ deploy_cert_manager(version='v1.19.2')
 k8s_yaml('./issuer.yaml')
 
 namespace_create('envoy-gateway-system')
-helm_remote(
+helm_resource(
   'gateway-helm',
-  repo_url='oci://registry-1.docker.io/envoyproxy',
-  repo_name='gateway-helm',
+  'oci://docker.io/envoyproxy/gateway-helm',
   release_name='envoy',
   namespace='envoy-gateway-system',
-  version='v1.7.0',
-  values=[],
-  set=[],
+  flags=[
+    '--version=v1.7.0',
+  ],
 )
 
 # install the gateway and configure tilt to start a port-forward to the
@@ -90,29 +89,15 @@ local_resource('api-syncagent-setup',
     allow_parallel=True,
 )
 
-namespace_create('kro-system')
-helm_remote(
-  'kro',
-  repo_url='oci://registry.k8s.io/kro/charts',
-  repo_name='kro',
-  release_name='kro',
-  namespace='kro-system',
-  version='0.8.1',
-  values=[],
-  set=[],
-)
-k8s_kind('ResourceGraphDefinition')
-k8s_yaml('./rgd.yaml')
-
 namespace_create('api-syncagent-system')
-helm_remote(
+k8s_yaml('./api-syncagent-rbac.yaml')
+helm_resource(
   'api-syncagent',
-  repo_url='https://kcp-dev.github.io/helm-charts',
-  repo_name='api-syncagent',
+  'https://github.com/kcp-dev/helm-charts/releases/download/api-syncagent-0.5.1/api-syncagent-0.5.1.tgz',
   release_name='api-syncagent',
   namespace='api-syncagent-system',
-  version='v0.5.1',
-  values=['api-syncagent-values.yaml'],
-  set=[],
+  flags=[
+    '--values=./api-syncagent-values.yaml',
+  ],
 )
 k8s_yaml('./published-resource.yaml')
