@@ -89,6 +89,19 @@ local_resource('api-syncagent-setup',
     allow_parallel=True,
 )
 
+namespace_create('kro-system')
+helm_resource(
+  'kro',
+  'oci://registry.k8s.io/kro/charts/kro',
+  release_name='kro',
+  namespace='kro-system',
+  flags=[
+    '--version=0.8.1',
+  ],
+)
+k8s_kind('ResourceGraphDefinition')
+k8s_yaml('./rgd.yaml')
+
 namespace_create('api-syncagent-system')
 k8s_yaml('./api-syncagent-rbac.yaml')
 helm_resource(

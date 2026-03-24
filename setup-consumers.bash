@@ -14,7 +14,7 @@ _consumer() {
     kubectl apply -f apibinding.yaml
     kubectl wait --for jsonpath='{.status.phase}=Bound' apibinding/certificates
     kubectl apply -f- <<EOF
-apiVersion: example.kcp.io/v1
+apiVersion: example.kcp.io/v1alpha1
 kind: Certificate
 metadata:
   name: certificate

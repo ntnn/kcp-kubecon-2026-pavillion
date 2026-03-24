@@ -11,7 +11,6 @@ spec:
     spec:
       fqdn: string
     status:
-      status: ${certificate.status.conditions.exists(c, c.type == "Ready" && c.status == "True") ? "Available":"Unavailable"}
       conditions: ${certificate.status.conditions}
       relatedResources:
         secret:
@@ -20,19 +19,7 @@ spec:
             version: ${secret.?apiVersion}
             kind: ${secret.?kind}
           name: ${secret.metadata.name}
-          # This is a mapping problem between the consumer workspace,
-          # resource-broker, the provider virtual workspace and the
-          # provider cluster.
-          # api-syncagent writes into a namespace matching the consumer
-          # workspace cluster name, resulting in kro noting the consumer
-          # workspace as the namespace here - which is correct locally.
-          # However when api-syncagent syncs the resources back into the
-          # VW the namespace changes back to 'default' (or wherever the
-          # resource originated from). For the PoC we hardcode the
-          # default namespace.
-          # This is one of the problems that would need a proper
-          # solution.
-          namespace: ${certificate.metadata.?annotations["remote-object-namespace"]}
+          namespace: ${secret.metadata.namespace}
 
   resources:
 
