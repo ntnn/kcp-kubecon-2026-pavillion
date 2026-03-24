@@ -70,10 +70,10 @@ k8s_yaml('./shard-root.yaml')
 k8s_resource('root:rootshard', labels='kcp')
 
 k8s_yaml('./shard-theseus.yaml')
-k8s_resource('theseus:shard', labels='kcp')
+k8s_resource('theseus', labels='kcp')
 
 k8s_yaml('./front-proxy.yaml')
-k8s_resource('frontproxy:frontproxy', labels='kcp')
+k8s_resource('frontproxy', labels='kcp')
 
 k8s_kind('Kubeconfig')
 k8s_yaml('./kubeconfig-kcp-admin.yaml')
