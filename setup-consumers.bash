@@ -24,4 +24,4 @@ EOF
 }
 
 _consumer cato
-# _consumer plato
+_consumer plato
