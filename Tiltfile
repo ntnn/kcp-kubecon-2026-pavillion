@@ -83,3 +83,17 @@ local_resource('kcp-admin extract',
     labels='kcp',
     allow_parallel=True,
 )
+
+namespace_create('kro-system')
+helm_remote(
+  'kro',
+  repo_url='oci://registry.k8s.io/kro/charts',
+  repo_name='kro',
+  release_name='kro',
+  namespace='kro-system',
+  version='0.8.1',
+  values=[],
+  set=[],
+)
+k8s_kind('ResourceGraphDefinition')
+k8s_yaml('./rgd.yaml')
