@@ -77,9 +77,15 @@ k8s_resource('frontproxy', labels='kcp')
 
 k8s_kind('Kubeconfig')
 k8s_yaml('./kubeconfig-kcp-admin.yaml')
-local_resource('kcp-admin extract',
+local_resource('kcp-admin-extract',
     cmd="./extract-kubeconfig.bash",
     deps=['root:kubeconfig'],
+    labels='kcp',
+    allow_parallel=True,
+)
+local_resource('api-syncagent-setup',
+    cmd="./api-syncagent-setup.bash",
+    deps=['kcp-admin-extract'],
     labels='kcp',
     allow_parallel=True,
 )
@@ -97,3 +103,15 @@ helm_remote(
 )
 k8s_kind('ResourceGraphDefinition')
 k8s_yaml('./rgd.yaml')
+
+namespace_create('api-syncagent-system')
+helm_remote(
+  'api-syncagent',
+  repo_url='https://kcp-dev.github.io/helm-charts',
+  repo_name='api-syncagent',
+  release_name='api-syncagent',
+  namespace='api-syncagent-system',
+  version='v0.5.1',
+  values=['api-syncagent-values.yaml'],
+  set=[],
+)

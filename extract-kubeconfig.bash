@@ -17,6 +17,7 @@ _extract() {
         | base64 -d \
         | sed -e 's#root.kcp.localhost#kcp.localhost#g' \
         > "$kubeconfig.kubeconfig"
+
 }
 
 _extract root

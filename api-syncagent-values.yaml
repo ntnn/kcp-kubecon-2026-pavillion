@@ -1,0 +1,10 @@
+kcpKubeconfig: kcp-syncagent-kubeconfig
+apiExportEndpointSliceName: certificates
+hostAliases:
+  enabled: true
+  values:
+    - ip: 10.96.2.2
+      hostnames:
+        - kcp.localhost
+        - root.kcp.localhost
+        - theseus.kcp.localhost
