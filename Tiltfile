@@ -17,6 +17,8 @@ helm_resource(
     '--version=v1.7.0',
   ],
 )
+k8s_kind('GatewayClass')
+k8s_kind('Gateway')
 
 # install the gateway and configure tilt to start a port-forward to the
 # resulting service that will route the traffic.
