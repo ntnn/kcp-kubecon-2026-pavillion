@@ -5,5 +5,19 @@ metadata:
 spec:
   resource:
     kind: Certificate
-    apiGroup: example.kcp.io
-    versions: [v1alpha1]
+    apiGroup: cert-manager.io
+    versions: [v1]
+  projection:
+    group: example.kcp.io
+    kind: Certificate
+    plural: certificates
+    shortNames: [certs]
+  related:
+    - identifier: certificate
+      origin: service
+      group: ""
+      version: v1
+      resource: secrets
+      object:
+        reference:
+          path: spec.secretName

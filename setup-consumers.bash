@@ -12,14 +12,14 @@ _consumer() {
     kubectl ws :root:consumers
     kubectl create-workspace --enter --ignore-existing "$1"
     kubectl apply -f apibinding.yaml
-    kubectl wait --for=condition=Ready apibinding/certificates
+    kubectl wait --for jsonpath='{.status.phase}=Bound' apibinding/certificates
     kubectl apply -f- <<EOF
-apiVersion: example.kcp.io/v1alpha1
+apiVersion: example.kcp.io/v1
 kind: Certificate
 metadata:
   name: certificate
 spec:
-  fqdn: $1.our.org
+  fqdn: "$1.our.org"
 EOF
 }
 

@@ -13,3 +13,13 @@ spec:
     state: Accepted
     selector:
       matchAll: true
+  - resource: secrets
+    verbs: ["*"]
+    state: Accepted
+    selector:
+      matchAll: true
+  - resource: namespaces
+    verbs: ["*"]
+    state: Accepted
+    selector:
+      matchAll: true

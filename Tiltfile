@@ -100,4 +100,5 @@ helm_resource(
     '--values=./api-syncagent-values.yaml',
   ],
 )
+k8s_kind('PublishedResource')
 k8s_yaml('./published-resource.yaml')
