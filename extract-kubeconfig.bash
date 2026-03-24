@@ -14,7 +14,9 @@ _extract() {
     kubectl wait "kubeconfig/$kubeconfig" --for=condition=Available --timeout=5m
     kubectl wait "secret/kcp-$kubeconfig-kubeconfig" --for=create --timeout=5m
     kubectl get "secret/kcp-$kubeconfig-kubeconfig" -o jsonpath='{.data.kubeconfig}' \
-        | base64 -d > "../../tilt-$kubeconfig.kubeconfig"
+        | base64 -d \
+        | sed -e 's#root.kcp.localhost#kcp.localhost#g' \
+        > "$kubeconfig.kubeconfig"
 }
 
 _extract root
