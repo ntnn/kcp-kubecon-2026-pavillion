@@ -78,9 +78,6 @@ k8s_kind('FrontProxy',
 k8s_yaml('./shard-root.yaml')
 k8s_resource('root:rootshard', labels='kcp', resource_deps=['gateway-helm'])
 
-k8s_yaml('./shard-theseus.yaml')
-k8s_resource('theseus:shard', labels='kcp', resource_deps=['gateway-helm', 'root:rootshard'])
-
 k8s_yaml('./front-proxy.yaml')
 k8s_resource('frontproxy', labels='kcp', resource_deps=['gateway-helm', 'root:rootshard'])
 
