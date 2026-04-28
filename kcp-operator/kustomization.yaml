@@ -3,4 +3,4 @@ resources:
 
 images:
   - name: ghcr.io/kcp-dev/kcp-operator
-    newTag: main@sha256:a051cf55be88b91bd93a8603f2f81eb566f20a6a25794aab9df8dae9b1cbf04d
+    newTag: main@sha256:2681279f5a71770e8cf7af1a4c3f35e9df6bbd1587fd801f7c5bd9063b295aec
